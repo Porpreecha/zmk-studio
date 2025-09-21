@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: Apache-2.0
+
+description: Microchip MCP23017 I/O Expander
+
+compatible: "microchip,mcp23017"
+
+include:
+  - name: gpio-controller.yaml
+  - name: i2c-device.yaml
+
+properties:
+  ngpios:
+    type: int
+    required: true
+    const: 16
+
+gpio-cells:
+  - pin
+  - flags
