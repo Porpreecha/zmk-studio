@@ -49,7 +49,7 @@
     };
 };
 
-/* เปิดใช้งาน I2C1 บน nice_nano_v2 + MCP23017 */
+/* กำหนด I2C1 + MCP23017 */
 &i2c1 {
     status = "okay";
     pinctrl-0 = <&i2c1_default>;
@@ -67,5 +67,15 @@
         reg = <0x21>;
         gpio-controller;
         #gpio-cells = <2>;
+    };
+};
+
+/* สร้าง pinctrl สำหรับ I2C1 เอง */
+&pinctrl {
+    i2c1_default: i2c1_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 2)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 3)>;
+        };
     };
 };
