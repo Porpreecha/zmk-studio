@@ -33,7 +33,7 @@
     ws2812: led_strip {
         compatible = "zmk,led-strip";
         label = "PerKeyLED";
-        gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;   /* เปลี่ยนเลข pin ให้ตรงกับ DATA ของ LED */
+        gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;   /* DATA pin ของ WS2812 */
         chain-length = <81>;                   /* จำนวน LED = จำนวนปุ่ม */
         color-mapping = <LED_COLOR_MAPPING_GRB>; /* WS2812 ใช้ GRB */
         status = "okay";
@@ -45,14 +45,14 @@
     status = "okay";
 
     mcp23017_0: mcp23017@20 {
-        compatible = "nxp,pca95xx";
+        compatible = "microchip,mcp23017";
         reg = <0x20>;
         gpio-controller;
         #gpio-cells = <2>;
     };
 
     mcp23017_1: mcp23017@21 {
-        compatible = "nxp,pca95xx";
+        compatible = "microchip,mcp23017";
         reg = <0x21>;
         gpio-controller;
         #gpio-cells = <2>;
