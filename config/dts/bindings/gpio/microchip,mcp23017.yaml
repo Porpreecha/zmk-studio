@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
-description: Microchip MCP23017 I/O Expander
+description: Microchip MCP23017 I/O Expander (16-bit I2C GPIO)
 
 compatible: "microchip,mcp23017"
 
@@ -13,6 +13,64 @@ properties:
     type: int
     required: true
     const: 16
+
+  int-gpios:
+    type: phandle-array
+    description: |
+      GPIO spec for the interrupt line. If provided, the driver
+      will configure interrupts for the MCP23017.
+
+  interrupt-controller:
+    type: boolean
+    description: |
+      Indicates that this device is also an interrupt controller.
+
+  # standard GPIO controller cell description
+  gpio-controller:
+    type: boolean
+    required: true
+
+  # Zephyr requirement: number of gpio-cells
+  "#gpio-cells":
+    type: int
+    required: true
+    const: 2
+
+  microchip,hw-reset-gpios:
+    type: phandle-array
+    description: Optional reset pin connection.
+
+  microchip,io-defaults:
+    type: int
+    description: |
+      Initial direction for each GPIO pin (16-bit mask).
+      1 = input, 0 = output.
+
+  microchip,output-defaults:
+    type: int
+    description: |
+      Initial output value for each GPIO pin (16-bit mask).
+      1 = high, 0 = low.
+
+  microchip,pullups:
+    type: int
+    description: |
+      Internal pull-up enable for each GPIO pin (16-bit mask).
+      1 = enabled, 0 = disabled.
+
+  microchip,polarity:
+    type: int
+    description: |
+      Input polarity inversion mask (16-bit).
+      1 = inverted, 0 = normal.
+
+  microchip,drive-strength:
+    type: int
+    enum:
+      - 0   # Open-drain
+      - 1   # Push-pull
+    description: |
+      Output driver configuration.
 
 gpio-cells:
   - pin
