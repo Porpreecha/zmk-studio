@@ -29,10 +29,7 @@ properties:
     type: boolean
     required: true
 
-  "#gpio-cells":
-    type: int
-    required: true
-    const: 2
+  "#gpio-cells": 2
 
   microchip,hw-reset-gpios:
     type: phandle-array
