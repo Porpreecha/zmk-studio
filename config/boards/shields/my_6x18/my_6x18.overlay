@@ -30,14 +30,15 @@
     };
 
     /* Per-Key LED (WS2812 chain) */
-    ws2812: led_strip {
+        ws2812: led_strip {
         compatible = "zmk,led-strip";
         label = "PerKeyLED";
         gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;   /* DATA pin ของ WS2812 */
         chain-length = <81>;                   /* จำนวน LED = จำนวนปุ่ม */
-        color-mapping = <LED_COLOR_MAPPING_GRB>; /* WS2812 ใช้ GRB */
+        color-mapping = <1 0 2>;               /* GRB → index 1=G, 0=R, 2=B */
         status = "okay";
     };
+
 };
 
 /* I²C expanders */
