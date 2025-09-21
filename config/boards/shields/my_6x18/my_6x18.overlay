@@ -3,10 +3,9 @@
 
     chosen {
         zmk,kscan = &kscan0;
-        zmk,backlight = &rgb_matrix;   /* เชื่อมกับ LED */
+        zmk,backlight = &neopixel0;
     };
 
-    /* GPIO Matrix for 6x18 Keyboard */
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
@@ -30,18 +29,16 @@
             <&mcp23017_1 0 GPIO_ACTIVE_HIGH>, <&mcp23017_1 1 GPIO_ACTIVE_HIGH>;
     };
 
-    /* NeoPixel / WS2812 RGB per-key */
-    rgb_matrix: neopixel {
+    neopixel0: neopixel {
         compatible = "adafruit,neopixel";
-        gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;   /* DATA ของ WS2812 */
+        gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
         #led-cells = <1>;
         label = "NEOPIXEL";
         status = "okay";
-        count = <108>;                           /* จำนวน LED */
+        count = <108>;
     };
 };
 
-/* I2C MCP23017 expanders */
 &i2c0 {
     status = "okay";
 
