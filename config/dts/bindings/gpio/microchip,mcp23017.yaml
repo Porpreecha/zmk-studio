@@ -5,8 +5,8 @@ description: Microchip MCP23017 I/O Expander (16-bit I2C GPIO)
 compatible: "microchip,mcp23017"
 
 include:
-  - name: gpio-controller.yaml
-  - name: i2c-device.yaml
+  - gpio-controller.yaml
+  - i2c-device.yaml
 
 properties:
   ngpios:
@@ -25,12 +25,10 @@ properties:
     description: |
       Indicates that this device is also an interrupt controller.
 
-  # standard GPIO controller cell description
   gpio-controller:
     type: boolean
     required: true
 
-  # Zephyr requirement: number of gpio-cells
   "#gpio-cells":
     type: int
     required: true
@@ -71,7 +69,3 @@ properties:
       - 1   # Push-pull
     description: |
       Output driver configuration.
-
-gpio-cells:
-  - pin
-  - flags
