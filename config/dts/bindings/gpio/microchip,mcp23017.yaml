@@ -29,8 +29,6 @@ properties:
     type: boolean
     required: true
 
-  "#gpio-cells": 2
-
   microchip,hw-reset-gpios:
     type: phandle-array
     description: Optional reset pin connection.
