@@ -40,17 +40,20 @@
                     <&mcp23017_1 7 GPIO_ACTIVE_HIGH>;
     };
 
-    /* LED Strip WS2812 ต้องอยู่ใน root node */
+    /* LED Strip WS2812 */
     led_strip: ws2812 {
         compatible = "worldsemi,ws2812";
-        gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>; /* ใช้ขา P0.06 */
         chain-length = <108>;   /* 6x18 */
         status = "okay";
     };
 };
 
+/* เปิดใช้งาน I2C1 บน nice_nano_v2 + MCP23017 */
 &i2c1 {
     status = "okay";
+    pinctrl-0 = <&i2c1_default>;
+    pinctrl-names = "default";
 
     mcp23017_1: mcp23017@20 {
         compatible = "microchip,mcp23017";
