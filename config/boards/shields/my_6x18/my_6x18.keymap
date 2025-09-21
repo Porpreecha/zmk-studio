@@ -45,10 +45,11 @@
         };
     };
 
-    rgb_matrix {
-        compatible = "zmk,per-key-rgb";
-        label = "RGB_MATRIX";
-        led-strip = <&led_strip>;
+       rgb_matrix {
+            compatible = "zmk,per-key-rgb";
+            label = "RGB_MATRIX";
+            led-strip = <&ws2812>;   /* แก้จาก &led_strip → &ws2812 */
+
 
         leds = <
             /* row col index */
