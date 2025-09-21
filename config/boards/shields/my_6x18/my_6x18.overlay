@@ -1,81 +1,65 @@
 / {
+    compatible = "zmk,keyboard-shield";
+
     chosen {
-        zmk,keyboard = &kscan;
+        zmk,kscan = &kscan0;
     };
 
-    leds {
-        compatible = "zmk,per-key-rgb";
-        led-strip = <&led_strip>;
-    };
-
-    kscan: kscan {
+    /* Matrix Scan */
+    kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
-        label = "KSCAN";
-        diode-direction = "COL2ROW";
+        diode-direction = "col2row";
 
-        row-gpios = <&mcp23017_1 0 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_1 1 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_1 2 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_1 3 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_1 4 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_1 5 GPIO_ACTIVE_HIGH>;
+        row-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 1 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 2 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 3 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 4 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 5 GPIO_ACTIVE_HIGH>;
 
-        col-gpios = <&mcp23017_2 0 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 1 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 2 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 3 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 4 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 5 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 6 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 7 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 8 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 9 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 10 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 11 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 12 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 13 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 14 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_2 15 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_1 6 GPIO_ACTIVE_HIGH>,
-                    <&mcp23017_1 7 GPIO_ACTIVE_HIGH>;
+        col-gpios =
+            <&mcp23017_0 0 GPIO_ACTIVE_HIGH>, <&mcp23017_0 1 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_0 2 GPIO_ACTIVE_HIGH>, <&mcp23017_0 3 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_0 4 GPIO_ACTIVE_HIGH>, <&mcp23017_0 5 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_0 6 GPIO_ACTIVE_HIGH>, <&mcp23017_0 7 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_0 8 GPIO_ACTIVE_HIGH>, <&mcp23017_0 9 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_0 10 GPIO_ACTIVE_HIGH>, <&mcp23017_0 11 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_0 12 GPIO_ACTIVE_HIGH>, <&mcp23017_0 13 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_0 14 GPIO_ACTIVE_HIGH>, <&mcp23017_0 15 GPIO_ACTIVE_HIGH>,
+            <&mcp23017_1 0 GPIO_ACTIVE_HIGH>, <&mcp23017_1 1 GPIO_ACTIVE_HIGH>;
     };
 
-    /* LED Strip WS2812 */
-    led_strip: ws2812 {
-        compatible = "worldsemi,ws2812";
-        gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>; /* ใช้ขา P0.06 */
-        chain-length = <108>;   /* 6x18 */
+    /* Per-Key LED (WS2812 chain) */
+    ws2812: led_strip {
+        compatible = "zmk,led-strip";
+        label = "PerKeyLED";
+        gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;   /* เปลี่ยนเลข pin ให้ตรงกับ DATA ของ LED */
+        chain-length = <81>;                   /* จำนวน LED = จำนวนปุ่ม */
+        color-mapping = <LED_COLOR_MAPPING_GRB>; /* WS2812 ใช้ GRB */
         status = "okay";
     };
 };
 
-/* กำหนด I2C1 + MCP23017 */
-&i2c1 {
+/* I²C expanders */
+&i2c0 {
     status = "okay";
-    pinctrl-0 = <&i2c1_default>;
-    pinctrl-names = "default";
 
-    mcp23017_1: mcp23017@20 {
-        compatible = "microchip,mcp23017";
+    mcp23017_0: mcp23017@20 {
+        compatible = "nxp,pca95xx";
         reg = <0x20>;
         gpio-controller;
         #gpio-cells = <2>;
     };
 
-    mcp23017_2: mcp23017@21 {
-        compatible = "microchip,mcp23017";
+    mcp23017_1: mcp23017@21 {
+        compatible = "nxp,pca95xx";
         reg = <0x21>;
         gpio-controller;
         #gpio-cells = <2>;
     };
 };
 
-/* สร้าง pinctrl สำหรับ I2C1 เอง */
-&pinctrl {
-    i2c1_default: i2c1_default {
-        group1 {
-            psels = <NRF_PSEL(TWIM_SDA, 0, 2)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 3)>;
-        };
-    };
+/* Hook LED node เข้ากับ backlight ของ ZMK */
+&zmk_backlight {
+    led-strip = <&ws2812>;
 };
