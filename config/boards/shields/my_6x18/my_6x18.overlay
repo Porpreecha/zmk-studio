@@ -14,7 +14,6 @@
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
 
-        /* ปรับเป็น "ROW2COL" ถ้าไดโอดต่ออีกแบบ */
         diode-direction = "COL2ROW";
 
         row-gpios = <&mcp23017_1 0 GPIO_ACTIVE_HIGH>,
@@ -65,7 +64,7 @@
 };
 
 /* LED Strip WS2812 */
-&led_strip {
+led_strip: ws2812 {
     compatible = "worldsemi,ws2812";
     gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>; /* ⚠️ เปลี่ยนเป็นขาที่คุณต่อจริง */
     chain-length = <108>;                /* 6x18 = 108 ดวง */
