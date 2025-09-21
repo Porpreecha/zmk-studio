@@ -1,46 +1,54 @@
 / {
     chosen {
-        zmk,keyboard = &kscan0;
+        zmk,keyboard = &kscan;
     };
 
+    /* Enable Per-Key RGB */
     leds {
         compatible = "zmk,per-key-rgb";
         led-strip = <&led_strip>;
     };
+
+    /* Define key scan matrix */
+    kscan: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        label = "KSCAN";
+
+        /* ปรับเป็น "ROW2COL" ถ้าไดโอดต่ออีกแบบ */
+        diode-direction = "COL2ROW";
+
+        row-gpios = <&mcp23017_1 0 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_1 1 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_1 2 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_1 3 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_1 4 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_1 5 GPIO_ACTIVE_HIGH>;
+
+        col-gpios = <&mcp23017_2 0 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 1 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 2 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 3 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 4 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 5 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 6 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 7 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 8 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 9 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 10 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 11 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 12 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 13 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 14 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_2 15 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_1 6 GPIO_ACTIVE_HIGH>,
+                    <&mcp23017_1 7 GPIO_ACTIVE_HIGH>;
+    };
 };
 
-&kscan0 {
-    compatible = "zmk,kscan-gpio-matrix";
-    label = "KSCAN";
-    diode-direction = "COL2ROW";
-    row-gpios = <&mcp23017_1 0 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_1 1 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_1 2 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_1 3 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_1 4 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_1 5 GPIO_ACTIVE_HIGH>;
-    col-gpios = <&mcp23017_2 0 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 1 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 2 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 3 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 4 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 5 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 6 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 7 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 8 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 9 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 10 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 11 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 12 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 13 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 14 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_2 15 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_1 6 GPIO_ACTIVE_HIGH>,
-                <&mcp23017_1 7 GPIO_ACTIVE_HIGH>;
-};
-
+/* I2C bus for MCP23017 */
 &i2c1 {
     status = "okay";
+
     mcp23017_1: mcp23017@20 {
         compatible = "microchip,mcp23017";
         reg = <0x20>;
@@ -56,9 +64,10 @@
     };
 };
 
+/* LED Strip WS2812 */
 &led_strip {
     compatible = "worldsemi,ws2812";
-    gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>; /* ปรับเป็นขาที่ต่อจริง */
-    chain-length = <108>;                /* 6x18 per key */
+    gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>; /* ⚠️ เปลี่ยนเป็นขาที่คุณต่อจริง */
+    chain-length = <108>;                /* 6x18 = 108 ดวง */
     status = "okay";
 };
