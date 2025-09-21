@@ -49,6 +49,7 @@
         reg = <0x20>;
         gpio-controller;
         #gpio-cells = <2>;
+        ngpios = <16>;
     };
 
     mcp23017_1: mcp23017@21 {
@@ -56,5 +57,6 @@
         reg = <0x21>;
         gpio-controller;
         #gpio-cells = <2>;
+        ngpios = <16>;
     };
 };
